@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Device: {{ object.name }}{% endblock %}
+
+{% block content %}
+    <style>
+    .axis path,
+    .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+}
+
+    .x.axis path {
+            display: none;
+    }
+
+    .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+}</style>
+<div class="container">
+<br/>
+  <div class="row">
+    <div class="col-sm-12">
+        {% if object.name %}
+            <h2>{{ object.name }}</h2>
+        {% endif %}
+    </div>
+  </div>
+
+    <div class="row">
+        <div id="canvas"></div>
+    </div>
+
+
+{% if object.owner == request.user %}
+<!-- Action buttons -->
+<div class="row">
+
+    <div class="col-sm-12 ">
+        <h3>CSV upload</h3>
+          <form action="{% url 'datapoint:bulk' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+                {{ form.as_p }}
+            <input class='btn btn-primary' type="submit" value="Upload" />
+          </form>
+    </div>
+
+</div>
+<!-- End Action buttons -->
+{% endif %}
+
+</div>
+
+{% endblock content %}
+
+
+{% block extra_javascript %}
+    <script src="{% static 'js/d3.v3.min.js' %}"></script>
+    <script>
+        datapoints=JSON.parse('{{ datapoints|safe }}');
+    </script>
+    <script src="{% static 'js/drawdata.js' %}"></script>
+{% endblock extra_javascript %}

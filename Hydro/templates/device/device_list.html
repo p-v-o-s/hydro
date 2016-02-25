@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}{% load i18n %}
+{% block title %}Devices{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>Devices</h2>
+
+    <div class="list-group">
+        {% for device in object_list %}
+          <a href="{% url 'devices:detail' device.token %}" class="list-group-item">
+            <h4 class="list-group-item-heading">{{ device.name }}</h4>
+                {% if device.latest %}
+                <small>Last data received on {{ device.latest }}</small>
+               {% else %}
+               <small>Doesn't have any data</small>
+              {% endif %}
+
+          </a>
+        {% endfor %}
+
+    </div>
+
+{% endblock content %}
